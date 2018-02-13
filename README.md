@@ -1,5 +1,5 @@
 # Install dependencies
-php composer.phar install
+./composer install
 
 # Add dependency
-php composer.phar require `name`
+./composer require `name`
