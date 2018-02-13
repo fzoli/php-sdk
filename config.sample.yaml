@@ -1,3 +1,9 @@
+debug_mode: true
+database:
+  driver: pdo_mysql
+  user: sample
+  password: sample
+  database_name: php_rest
 memcached:
   host: localhost
   port: 11211
