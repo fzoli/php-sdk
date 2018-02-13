@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Entity\ProductRepo;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
 use Psr\SimpleCache\CacheInterface;
@@ -15,15 +16,28 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Cache\Simple\MemcachedCache;
 
-class Services implements EntityManagerFactory {
+class Services {
 
-    /* Singleton instance. */
+    /**
+     * Singleton instance.
+     * @var Services
+     */
     private static $instance = null;
 
     /* Lazily created instances. */
+
+    /**
+     * @var EntityManager
+     */
     private $entityManager;
 
+    /**
+     * @var ProductRepo
+     */
+    private $productRepo;
+
     /* Instances created in constructor. */
+
     private $config;
     private $cache;
     private $serializer;
@@ -102,6 +116,14 @@ class Services implements EntityManagerFactory {
         );
         $this->entityManager = EntityManager::create($dbParams, $entityManagerConfig);
         return $this->entityManager;
+    }
+
+    public function createProductRepo(): ProductRepo {
+        if (isset($this->productRepo)) {
+            return $this->productRepo;
+        }
+        $this->productRepo = new ProductRepo($this->createEntityManager());
+        return$this->productRepo;
     }
 
 }

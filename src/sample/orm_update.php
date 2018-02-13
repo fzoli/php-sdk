@@ -2,13 +2,9 @@
 require_once __DIR__ . '/../autoload.php';
 
 $entityManager = \App\Services::Instance()->createEntityManager();
+$repo = \App\Services::Instance()->createProductRepo();
 
-$productRepository = $entityManager->getRepository('App\Entity\Product');
-
-/* @var $products App\Entity\Product[] */
-$products = $productRepository->findAll();
-
-foreach ($products as $product) {
+foreach ($repo->findAll() as $product) {
     $product->setName('Updated name'.uniqid());
     echo "Updated Product with ID " . $product->getId() . PHP_EOL;
 }
