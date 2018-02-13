@@ -1,13 +1,21 @@
-# Install dependencies
+# Dependencies 
+
+## Install dependencies
 ./composer install
 
-# Add dependency
+## Add dependency
 ./composer require `name`
 
-# Run a unit test
+# Tests
 
-./phpunit --bootstrap src/autoload.php tests/`ClassName`.php
+## Run a unit test
 
-# Run each unit test
+./vendor/bin/phpunit --bootstrap src/autoload.php tests/`ClassName`.php
 
-./phpunit --bootstrap src/autoload.php tests
+## Run each unit test
+
+./vendor/bin/phpunit --bootstrap src/autoload.php tests
+
+## Run with configuration
+
+./vendor/bin/phpunit
