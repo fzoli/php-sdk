@@ -4,7 +4,7 @@ require_once __DIR__ . '/autoload.php';
 
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
@@ -12,21 +12,6 @@ class User {
 
     private $name;
     private $createDate;
-
-    public static function createSerializer(): Serializer {
-        $encoders = array(new JsonEncoder(), new XmlEncoder());
-        $normalizer = new GetSetMethodNormalizer();
-
-        $callback = function ($dateTime) {
-            return $dateTime instanceof \DateTime
-                ? $dateTime->format(\DateTime::ISO8601)
-                : '';
-        };
-
-        $normalizer->setCallbacks(array('createDate' => $callback));
-
-        return new Serializer(array($normalizer), $encoders);
-    }
 
     public static function builder(): User {
         return new User();
@@ -55,11 +40,26 @@ class User {
 
 }
 
-$user = User::builder()
+$s = new Serializer(
+    array(
+        new DateTimeNormalizer(\DateTime::ISO8601, new DateTimeZone("UTC")),
+        new ObjectNormalizer()
+    ),
+    array(
+        new JsonEncoder(),
+        new XmlEncoder()
+    )
+);
+
+$user1 = User::builder()
     ->setName("Zoli")
     ->setCreateDate(new DateTime());
 
-$jsonContent = User::createSerializer()->serialize($user, 'json');
+$user2 = User::builder()
+    ->setName("Zoli")
+    ->setCreateDate(new DateTime());
+
+$jsonContent = $s->serialize(array($user1, $user2), 'json');
 echo $jsonContent;
 
 ?>
