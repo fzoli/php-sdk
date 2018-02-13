@@ -2,8 +2,10 @@
 <?php
 require_once __DIR__ . '/autoload.php';
 
+use Symfony\Component\Serializer\Encoder\CsvEncoder;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Encoder\YamlEncoder;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
@@ -89,7 +91,9 @@ $s = new Serializer(
     ),
     array(
         new JsonEncoder(),
-        new XmlEncoder()
+        new XmlEncoder(),
+        new CsvEncoder(),
+        new YamlEncoder()
     )
 );
 
@@ -100,7 +104,20 @@ $user1 = User::builder()
         ->setLastName("B"))
     ->setCreateDate(new DateTime());
 
-$jsonContent = $s->serialize(array($user1), 'json');
-echo $jsonContent;
+echo 'JSON:'.PHP_EOL;
+echo $s->serialize(array($user1), 'json');
+echo PHP_EOL.PHP_EOL;
+
+echo 'XML:'.PHP_EOL;
+echo $s->serialize(array($user1), 'xml');
+echo PHP_EOL.PHP_EOL;
+
+echo 'CSV:'.PHP_EOL;
+echo $s->serialize(array($user1), 'csv');
+echo PHP_EOL.PHP_EOL;
+
+echo 'YAML:'.PHP_EOL;
+echo $s->serialize(array($user1), 'yaml');
+echo PHP_EOL.PHP_EOL;
 
 ?>
