@@ -19,3 +19,13 @@
 ## Run with configuration
 
 ./vendor/bin/phpunit
+
+# Database
+
+## Drop
+
+./vendor/bin/doctrine orm:schema-tool:drop --force
+
+## Create
+
+./vendor/bin/doctrine orm:schema-tool:create
