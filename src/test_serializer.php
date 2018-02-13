@@ -2,14 +2,6 @@
 <?php
 require_once __DIR__ . '/autoload.php';
 
-use Symfony\Component\Serializer\Encoder\CsvEncoder;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Encoder\YamlEncoder;
-use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
-
 class User {
 
     private $name;
@@ -84,18 +76,7 @@ class PersonName {
 
 }
 
-$s = new Serializer(
-    array(
-        new DateTimeNormalizer(\DateTime::ISO8601, new DateTimeZone("UTC")),
-        new ObjectNormalizer()
-    ),
-    array(
-        new JsonEncoder(),
-        new XmlEncoder(),
-        new CsvEncoder(),
-        new YamlEncoder()
-    )
-);
+$s = App\Services::Instance()->getSerializer();
 
 $user1 = User::builder()
     ->setName("Zoli")
