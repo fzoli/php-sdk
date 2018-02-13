@@ -29,11 +29,15 @@ class Product {
         return $this->id;
     }
 
+    public function getVersion(): int {
+        return $this->version;
+    }
+
     public function getName(): string {
         return $this->name;
     }
 
-    public function setName(string $name) {
+    public function setName(string $name): void {
         $this->name = $name;
     }
 
