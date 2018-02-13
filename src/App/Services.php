@@ -17,8 +17,13 @@ use Symfony\Component\Cache\Simple\MemcachedCache;
 
 class Services implements EntityManagerFactory {
 
+    /* Singleton instance. */
     private static $instance = null;
 
+    /* Lazily created instances. */
+    private $entityManager;
+
+    /* Instances created in constructor. */
     private $config;
     private $cache;
     private $serializer;
@@ -82,6 +87,9 @@ class Services implements EntityManagerFactory {
     }
 
     public function createEntityManager(): EntityManager {
+        if (isset($this->entityManager)) {
+            return $this->entityManager;
+        }
         $appConfig = $this->getConfig();
         $entityManagerConfig = Setup::createAnnotationMetadataConfiguration(
             array(__DIR__.'/Entity'),
@@ -92,8 +100,8 @@ class Services implements EntityManagerFactory {
             'password' => $appConfig->getDatabasePassword(),
             'dbname'   => $appConfig->getDatabaseDatabaseName(),
         );
-        return EntityManager::create(
-            $dbParams, $entityManagerConfig);
+        $this->entityManager = EntityManager::create($dbParams, $entityManagerConfig);
+        return $this->entityManager;
     }
 
 }
