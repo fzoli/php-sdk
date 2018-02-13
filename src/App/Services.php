@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Entity\ProductRepo;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
 use Psr\SimpleCache\CacheInterface;
@@ -32,7 +31,7 @@ class Services {
     private $entityManager;
 
     /**
-     * @var ProductRepo
+     * @var Database\Product\Repo
      */
     private $productRepo;
 
@@ -106,7 +105,7 @@ class Services {
         }
         $appConfig = $this->getConfig();
         $entityManagerConfig = Setup::createAnnotationMetadataConfiguration(
-            array(__DIR__.'/Entity'),
+            array(__DIR__.'/Database'),
             $appConfig->isDebugMode());
         $dbParams = array(
             'driver'   => $appConfig->getDatabaseDriver(),
@@ -118,11 +117,11 @@ class Services {
         return $this->entityManager;
     }
 
-    public function createProductRepo(): ProductRepo {
+    public function createProductRepo(): Database\Product\Repo {
         if (isset($this->productRepo)) {
             return $this->productRepo;
         }
-        $this->productRepo = new ProductRepo($this->createEntityManager());
+        $this->productRepo = new Database\Product\Repo($this->createEntityManager());
         return$this->productRepo;
     }
 

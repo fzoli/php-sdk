@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Entity;
+namespace App\Database\Product;
 
 use Doctrine\ORM\EntityManager;
 
-class ProductRepo {
+class Repo {
 
     private $entityManager;
     private $repo;
 
     public function __construct(EntityManager $entityManager) {
         $this->entityManager = $entityManager;
-        $this->repo = $entityManager->getRepository('App\Entity\Product');
+        $this->repo = $entityManager->getRepository('App\Database\Product\Entity');
     }
 
     /**
-     * @return Product[] list of products
+     * @return Entity[] list of products
      */
     public function findAll() {
         return $this->repo->findAll();
