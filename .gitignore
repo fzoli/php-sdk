@@ -1,5 +1,8 @@
 # Composer dependencies directory
 vendor
 
+# Application configuration file
+config.yaml
+
 # IDEA
 .idea
