@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Setup;
 use Psr\SimpleCache\CacheInterface;
 use Symfony\Component\Serializer\Encoder\CsvEncoder;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -13,7 +15,7 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Cache\Simple\MemcachedCache;
 
-class Services {
+class Services implements EntityManagerFactory {
 
     private static $instance = null;
 
@@ -77,6 +79,21 @@ class Services {
                 new YamlEncoder()
             )
         );
+    }
+
+    public function createEntityManager(): EntityManager {
+        $appConfig = $this->getConfig();
+        $entityManagerConfig = Setup::createAnnotationMetadataConfiguration(
+            array(__DIR__.'/Entity'),
+            $appConfig->isDebugMode());
+        $dbParams = array(
+            'driver'   => $appConfig->getDatabaseDriver(),
+            'user'     => $appConfig->getDatabaseUser(),
+            'password' => $appConfig->getDatabasePassword(),
+            'dbname'   => $appConfig->getDatabaseDatabaseName(),
+        );
+        return EntityManager::create(
+            $dbParams, $entityManagerConfig);
     }
 
 }
