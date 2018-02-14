@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Service\Product\ProductService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
 use Psr\SimpleCache\CacheInterface;
@@ -74,6 +75,24 @@ class Services {
         return $this->serializer;
     }
 
+    public function getEntityManager(): EntityManager {
+        if (isset($this->entityManager)) {
+            return $this->entityManager;
+        }
+        $this->entityManager = $this->createEntityManager(
+            $this->getConfig());
+        return $this->entityManager;
+    }
+
+    public function getProductService(): ProductService {
+        if (isset($this->productService)) {
+            return $this->productService;
+        }
+        $this->productService = $this->createProductService(
+            $this->getEntityManager());
+        return $this->productService;
+    }
+
     private function createConfig(): Config {
         return new Config(Yaml::parseFile(__DIR__ . '/../../config.yaml'));
     }
@@ -99,30 +118,21 @@ class Services {
         );
     }
 
-    public function createEntityManager(): EntityManager {
-        if (isset($this->entityManager)) {
-            return $this->entityManager;
-        }
-        $appConfig = $this->getConfig();
+    private function createEntityManager(Config $appConfig): EntityManager {
         $entityManagerConfig = Setup::createAnnotationMetadataConfiguration(
-            array(__DIR__.'/Database'),
+            array(__DIR__ . '/Database'),
             $appConfig->isDebugMode());
         $dbParams = array(
-            'driver'   => $appConfig->getDatabaseDriver(),
-            'user'     => $appConfig->getDatabaseUser(),
+            'driver' => $appConfig->getDatabaseDriver(),
+            'user' => $appConfig->getDatabaseUser(),
             'password' => $appConfig->getDatabasePassword(),
-            'dbname'   => $appConfig->getDatabaseDatabaseName(),
+            'dbname' => $appConfig->getDatabaseDatabaseName(),
         );
-        $this->entityManager = EntityManager::create($dbParams, $entityManagerConfig);
-        return $this->entityManager;
+        return EntityManager::create($dbParams, $entityManagerConfig);
     }
 
-    public function createProductService(): Service\Product\ProductService {
-        if (isset($this->productService)) {
-            return $this->productService;
-        }
-        $this->productService= new Service\Product\ProductService($this->createEntityManager());
-        return$this->productService;
+    private function createProductService(EntityManager $entityManager): ProductService {
+        return new ProductService($entityManager);
     }
 
 }

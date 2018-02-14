@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 final class DatabaseTest extends TestCase {
 
     public function testDatabaseCRUD(): void {
-        $service = \App\Services::Instance()->createProductService();
+        $service = \App\Services::Instance()->getProductService();
 
         // Create
         $name = uniqid('database_test_');
@@ -36,7 +36,7 @@ final class DatabaseTest extends TestCase {
 
     public function testDatabaseEntityNotFoundException(): void {
         $this->expectException("\App\Service\EntityNotFoundException");
-        $service = \App\Services::Instance()->createProductService();
+        $service = \App\Services::Instance()->getProductService();
         $name = uniqid('database_test_none_');
         $service->findOneByName($name);
     }
