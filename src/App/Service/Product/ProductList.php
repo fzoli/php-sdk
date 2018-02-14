@@ -2,6 +2,10 @@
 
 namespace App\Service\Product;
 
+/**
+ * Immutable Product list.
+ * @package App\Service\Product
+ */
 class ProductList implements \IteratorAggregate {
 
     /**

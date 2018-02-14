@@ -2,6 +2,10 @@
 
 namespace App\Service\Product;
 
+/**
+ * Immutable Product.
+ * @package App\Service\Product
+ */
 class Product {
 
     static function builder(): ProductBuilder {

@@ -6,6 +6,10 @@ use App\Service\EntityNotFoundException;
 use App\Database\ProductEntity;
 use Doctrine\ORM\EntityManager;
 
+/**
+ * Product service.
+ * @package App\Service\Product
+ */
 class ProductService {
 
     private $entityManager;

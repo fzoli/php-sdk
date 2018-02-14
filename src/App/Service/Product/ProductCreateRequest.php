@@ -2,22 +2,44 @@
 
 namespace App\Service\Product;
 
+/**
+ * Immutable Product create request.
+ * @package App\Service\Product
+ */
 class ProductCreateRequest {
 
-    static function builder(): ProductCreateRequest {
-        return new ProductCreateRequest();
+    static function builder(): ProductCreateRequestBuilder {
+        return new ProductCreateRequestBuilder();
     }
 
     private $name;
 
-    private function __construct() {
+    public function __construct(ProductCreateRequestBuilder $builder) {
+        $this->name = $builder->getName();
     }
 
     public function getName(): string {
         return $this->name;
     }
 
-    public function setName(string $name): ProductCreateRequest {
+}
+
+class ProductCreateRequestBuilder {
+
+    private $name;
+
+    public function __construct() {
+    }
+
+    public function build(): ProductCreateRequest {
+        return new ProductCreateRequest($this);
+    }
+
+    public function getName(): string {
+        return $this->name;
+    }
+
+    public function withName(string $name): ProductCreateRequestBuilder {
         $this->name = $name;
         return $this;
     }

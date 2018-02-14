@@ -7,7 +7,8 @@ use App\Services;
 $service = Services::Instance()->createProductService();
 foreach ($service->findAll() as $product) {
     $result = $service->updateProduct(ProductUpdateRequest::builder()
-        ->setId($product->getId())
-        ->setName('Updated name'.uniqid()));
+        ->withId($product->getId())
+        ->withName('Updated name'.uniqid())
+        ->build());
     echo "Updated Product with ID " . $result->getId() . PHP_EOL;
 }

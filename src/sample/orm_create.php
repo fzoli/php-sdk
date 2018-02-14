@@ -6,5 +6,6 @@ use App\Services;
 
 $service = Services::Instance()->createProductService();
 $product = $service->createProduct(ProductCreateRequest::builder()
-    ->setName('Product '.uniqid()));
+    ->withName('Product '.uniqid())
+    ->build());
 echo "Created Product with ID " . $product->getId() . PHP_EOL;

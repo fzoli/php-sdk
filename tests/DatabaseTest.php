@@ -13,7 +13,8 @@ final class DatabaseTest extends TestCase {
         // Create
         $name = uniqid('database_test_');
         $product = $service->createProduct(ProductCreateRequest::builder()
-            ->setName($name));
+            ->withName($name)
+            ->build());
         $this->assertTrue($product->getId() > 0);
         $this->assertEquals(1, $product->getVersion());
         $this->assertEquals($name, $product->getName());
@@ -25,8 +26,9 @@ final class DatabaseTest extends TestCase {
 
         // Update
         $service->updateProduct(ProductUpdateRequest::builder()
-            ->setId($product->getId())
-            ->setName($name.' updated'));
+            ->withId($product->getId())
+            ->withName($name.' updated')
+            ->build());
 
         // Delete
         $service->deleteProduct($product->getId());
