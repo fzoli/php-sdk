@@ -34,11 +34,11 @@ class User {
         return $this;
     }
 
-    public function getCreateDate(): DateTime {
+    public function getCreateDate(): DateTimeImmutable {
         return $this->createDate;
     }
 
-    public function setCreateDate(DateTime $createDate): User {
+    public function setCreateDate(DateTimeImmutable $createDate): User {
         $this->createDate = $createDate;
         return $this;
     }
@@ -81,7 +81,7 @@ final class SerializerTest extends TestCase {
 
     public function testUserJsonSerialize(): void {
         $s = App\Services::Instance()->getSerializer();
-        $createDate = new DateTime();
+        $createDate = new DateTimeImmutable();
         $user = User::builder()
             ->setName("Zoli")
             ->setPersonName(PersonName::builder()
