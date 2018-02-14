@@ -17,7 +17,8 @@ class ProductEntity {
 
     /**
      * @Version
-     * @Column(type="integer") */
+     * @Column(type="integer")
+     **/
     private $version;
 
     /**
