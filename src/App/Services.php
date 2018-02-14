@@ -2,19 +2,12 @@
 
 namespace App;
 
+use App\Context\RestServiceContextProvider;
 use App\Service\Product\ProductService;
+use App\Service\ServiceFactory;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Tools\Setup;
 use Psr\SimpleCache\CacheInterface;
-use Symfony\Component\Serializer\Encoder\CsvEncoder;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Encoder\YamlEncoder;
-use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Yaml\Yaml;
-use Symfony\Component\Cache\Simple\MemcachedCache;
 
 class Services {
 
@@ -38,6 +31,7 @@ class Services {
 
     /* Instances created in constructor. */
 
+    private $serviceFactory;
     private $config;
     private $cache;
     private $serializer;
@@ -55,9 +49,13 @@ class Services {
 
     private function __construct() {
         // Singleton
-        $config = $this->createConfig();
-        $cache = $this->createCache($config);
-        $serializer = $this->createSerializer();
+        $contextProvider = new RestServiceContextProvider();
+        $context = $contextProvider->createServiceContext();
+        $serviceFactory = new ServiceFactory($context);
+        $config = $serviceFactory->createConfig();
+        $cache = $serviceFactory->createCache($config);
+        $serializer = $serviceFactory->createSerializer();
+        $this->serviceFactory = $serviceFactory;
         $this->config = $config;
         $this->cache = $cache;
         $this->serializer = $serializer;
@@ -79,7 +77,7 @@ class Services {
         if (isset($this->entityManager)) {
             return $this->entityManager;
         }
-        $this->entityManager = $this->createEntityManager(
+        $this->entityManager = $this->serviceFactory->createEntityManager(
             $this->getConfig());
         return $this->entityManager;
     }
@@ -88,51 +86,9 @@ class Services {
         if (isset($this->productService)) {
             return $this->productService;
         }
-        $this->productService = $this->createProductService(
+        $this->productService = $this->serviceFactory->createProductService(
             $this->getEntityManager());
         return $this->productService;
-    }
-
-    private function createConfig(): Config {
-        return new Config(Yaml::parseFile(__DIR__ . '/../../config.yaml'));
-    }
-
-    private function createCache(Config $config): CacheInterface {
-        $memcached = new \Memcached();
-        $memcached->addServer($config->getMemcachedHost(), $config->getMemcachedPort());
-        return new MemcachedCache($memcached);
-    }
-
-    private function createSerializer(): Serializer {
-        return new Serializer(
-            array(
-                new DateTimeNormalizer(\DateTime::ISO8601, new \DateTimeZone("UTC")),
-                new ObjectNormalizer()
-            ),
-            array(
-                new JsonEncoder(),
-                new XmlEncoder(),
-                new CsvEncoder(),
-                new YamlEncoder()
-            )
-        );
-    }
-
-    private function createEntityManager(Config $appConfig): EntityManager {
-        $entityManagerConfig = Setup::createAnnotationMetadataConfiguration(
-            array(__DIR__ . '/Database'),
-            $appConfig->isDebugMode());
-        $dbParams = array(
-            'driver' => $appConfig->getDatabaseDriver(),
-            'user' => $appConfig->getDatabaseUser(),
-            'password' => $appConfig->getDatabasePassword(),
-            'dbname' => $appConfig->getDatabaseDatabaseName(),
-        );
-        return EntityManager::create($dbParams, $entityManagerConfig);
-    }
-
-    private function createProductService(EntityManager $entityManager): ProductService {
-        return new Service\Product\ProductServiceImpl($entityManager);
     }
 
 }

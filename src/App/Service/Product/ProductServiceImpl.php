@@ -4,7 +4,9 @@ namespace App\Service\Product;
 
 use App\Service\EntityNotFoundException;
 use App\Database\ProductEntity;
+use App\Service\LoggerFactory;
 use Doctrine\ORM\EntityManager;
+use Monolog\Logger;
 
 /**
  * Product service.
@@ -12,10 +14,12 @@ use Doctrine\ORM\EntityManager;
  */
 class ProductServiceImpl implements ProductService {
 
+    private $logger;
     private $entityManager;
     private $repo;
 
-    public function __construct(EntityManager $entityManager) {
+    public function __construct(LoggerFactory $loggerFactory, EntityManager $entityManager) {
+        $this->logger = $loggerFactory->createLogger('ProductServiceImpl');
         $this->entityManager = $entityManager;
         $this->repo = $entityManager->getRepository('\App\Database\ProductEntity');
     }
@@ -25,6 +29,7 @@ class ProductServiceImpl implements ProductService {
      * @throws \Exception
      */
     public function findAll(): ProductList {
+        $this->logger->log(Logger::DEBUG, 'findAll');
         $this->entityManager->beginTransaction();
         try {
             $result = $this->toPublicList($this->repo->findAll());
@@ -42,6 +47,7 @@ class ProductServiceImpl implements ProductService {
      * @throws \Exception
      */
     public function findOneByName(string $name): Product {
+        $this->logger->log(Logger::DEBUG, 'findOneByName', [$name]);
         $this->entityManager->beginTransaction();
         try {
             /** @var $entity ProductEntity */
@@ -59,6 +65,7 @@ class ProductServiceImpl implements ProductService {
     }
 
     public function createProduct(ProductCreateRequest $request): Product {
+        $this->logger->log(Logger::DEBUG, 'createProduct');
         $this->entityManager->beginTransaction();
         try {
             $entity = new ProductEntity();
@@ -76,6 +83,7 @@ class ProductServiceImpl implements ProductService {
     }
 
     public function updateProduct(ProductUpdateRequest $request): Product {
+        $this->logger->log(Logger::DEBUG, 'updateProduct');
         $this->entityManager->beginTransaction();
         try {
             /** @var $entity ProductEntity */
@@ -95,6 +103,7 @@ class ProductServiceImpl implements ProductService {
     }
 
     public function deleteProduct(int $productId): void {
+        $this->logger->log(Logger::DEBUG, 'deleteProduct', [$productId]);
         $this->entityManager->beginTransaction();
         try {
             /** @var $entity ProductEntity */

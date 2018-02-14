@@ -1,6 +1,9 @@
 # Composer dependencies directory
 vendor
 
+# Log files
+logs
+
 # Application configuration file
 config.yaml
 
