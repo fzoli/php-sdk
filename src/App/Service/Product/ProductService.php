@@ -62,6 +62,7 @@ class ProductService {
         $this->entityManager->beginTransaction();
         try {
             $entity = new ProductEntity();
+            $entity->setCreateTime(new \DateTime());
             $entity->setName($request->getName());
             $this->entityManager->persist($entity);
             $this->entityManager->flush($entity);
