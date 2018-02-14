@@ -30,7 +30,7 @@ class ProductEntity {
     private $name;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @Column(type="datetime")
      * @var \DateTime
      */
     protected $createTime;
