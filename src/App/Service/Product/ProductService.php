@@ -103,6 +103,7 @@ class ProductService {
                 throw new EntityNotFoundException();
             }
             $this->entityManager->remove($entity);
+            $this->entityManager->flush($entity);
             $this->entityManager->commit();
         } catch (\Exception $e) {
             $this->entityManager->rollBack();
