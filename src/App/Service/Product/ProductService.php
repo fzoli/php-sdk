@@ -17,13 +17,13 @@ class ProductService {
     }
 
     /**
-     * @return Product[] list of products
+     * @return ProductList
      * @throws \Exception
      */
-    public function findAll(): array {
+    public function findAll(): ProductList {
         $this->entityManager->beginTransaction();
         try {
-            $result = $this->toPublicArray($this->repo->findAll());
+            $result = $this->toPublicList($this->repo->findAll());
             $this->entityManager->commit();
             return $result;
         } catch (\Exception $e) {
@@ -107,21 +107,22 @@ class ProductService {
 
     private function toPublic(ProductEntity $entity): Product {
         return Product::builder()
-            ->setId($entity->getId())
-            ->setVersion($entity->getVersion())
-            ->setName($entity->getName());
+            ->withId($entity->getId())
+            ->withVersion($entity->getVersion())
+            ->withName($entity->getName())
+            ->build();
     }
 
     /**
      * @param ProductEntity[] $entities
-     * @return Product[]
+     * @return ProductList
      */
-    private function toPublicArray(array $entities): array {
-        $array = [];
+    private function toPublicList(array $entities): ProductList {
+        $items = [];
         foreach ($entities as $entity) {
-            $array[] = $this->toPublic($entity);
+            $items[] = $this->toPublic($entity);
         }
-        return $array;
+        return new ProductList(...$items);
     }
 
 }
