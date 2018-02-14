@@ -132,7 +132,7 @@ class Services {
     }
 
     private function createProductService(EntityManager $entityManager): ProductService {
-        return new ProductService($entityManager);
+        return new Service\Product\ProductServiceImpl($entityManager);
     }
 
 }
