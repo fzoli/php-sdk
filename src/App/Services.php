@@ -31,9 +31,9 @@ class Services {
     private $entityManager;
 
     /**
-     * @var Database\Product\Repo
+     * @var Service\Product\ProductService
      */
-    private $productRepo;
+    private $productService;
 
     /* Instances created in constructor. */
 
@@ -117,12 +117,12 @@ class Services {
         return $this->entityManager;
     }
 
-    public function createProductRepo(): Database\Product\Repo {
-        if (isset($this->productRepo)) {
-            return $this->productRepo;
+    public function createProductService(): Service\Product\ProductService {
+        if (isset($this->productService)) {
+            return $this->productService;
         }
-        $this->productRepo = new Database\Product\Repo($this->createEntityManager());
-        return$this->productRepo;
+        $this->productService= new Service\Product\ProductService($this->createEntityManager());
+        return$this->productService;
     }
 
 }

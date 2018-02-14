@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Database\Product;
+namespace App\Database;
 
 /**
  * @Entity
  * @Table(name="products")
  */
-class Entity {
+class ProductEntity {
 
     /**
      * @Id
