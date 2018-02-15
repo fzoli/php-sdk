@@ -1,7 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Api;
 
+use App\Config;
 use App\Context\RestServiceContextProvider;
 use App\Service\Product\ProductService;
 use App\Service\ServiceFactory;
@@ -25,7 +26,7 @@ class Services {
     private $entityManager;
 
     /**
-     * @var Service\Product\ProductService
+     * @var \App\Service\Product\ProductService
      */
     private $productService;
 

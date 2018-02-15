@@ -2,7 +2,7 @@
 <?php
 require_once __DIR__ . '/../autoload.php';
 
-use App\Services;
+use App\Api\Services;
 
 $key = 'a';
 $cache = Services::Instance()->getCache();

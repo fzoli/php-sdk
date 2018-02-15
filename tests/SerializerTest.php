@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Api\Services;
 use PHPUnit\Framework\TestCase;
 
 class User {
@@ -80,7 +81,7 @@ class PersonName {
 final class SerializerTest extends TestCase {
 
     public function testUserJsonSerialize(): void {
-        $s = App\Services::Instance()->getSerializer();
+        $s = Services::Instance()->getSerializer();
         $createDate = new DateTimeImmutable();
         $user = User::builder()
             ->setName("Zoli")

@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../autoload.php';
 
 use App\Service\Product\ProductCreateRequest;
-use App\Services;
+use App\Api\Services;
 
 $service = Services::Instance()->getProductService();
 $product = $service->createProduct(ProductCreateRequest::builder()

@@ -1,6 +1,9 @@
 #!/usr/bin/php
 <?php
+
 require_once __DIR__ . '/../autoload.php';
+
+use App\Api\Services;
 
 class User {
 
@@ -76,7 +79,7 @@ class PersonName {
 
 }
 
-$s = App\Services::Instance()->getSerializer();
+$s = Services::Instance()->getSerializer();
 
 $user1 = User::builder()
     ->setName("Zoli")
