@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../autoload.php';
+require_once __DIR__ . '/../bootstrap.php';
 
 use App\Service\Product\ProductUpdateRequest;
 use App\Api\Services;

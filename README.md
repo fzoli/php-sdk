@@ -10,11 +10,11 @@
 
 ## Run a unit test
 
-./vendor/bin/phpunit --bootstrap src/autoload.php tests/`ClassName`.php
+./vendor/bin/phpunit --bootstrap src/bootstrap.php src/tests/`ClassName`.php
 
 ## Run each unit test
 
-./vendor/bin/phpunit --bootstrap src/autoload.php tests
+./vendor/bin/phpunit --bootstrap src/bootstrap.php src/tests
 
 ## Run with configuration
 

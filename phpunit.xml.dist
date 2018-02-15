@@ -4,19 +4,19 @@
     xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/7.0/phpunit.xsd"
     backupGlobals="false"
     colors="true"
-    bootstrap="src/autoload.php"
+    bootstrap="src/bootstrap.php"
     beStrictAboutTestsThatDoNotTestAnything="true"
     beStrictAboutOutputDuringTests="true"
     beStrictAboutChangesToGlobalState="true"
     verbose="true">
     <testsuites>
         <testsuite name="Test suite">
-            <directory>./tests/</directory>
+            <directory>src/tests/</directory>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">src</directory>
+            <directory suffix=".php">src/App</directory>
         </whitelist>
     </filter>
 </phpunit>

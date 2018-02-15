@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use App\Config;
+use App\Common\Config;
 use App\Service\Product\ProductService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
