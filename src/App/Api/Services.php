@@ -2,15 +2,16 @@
 
 namespace App\Api;
 
-use App\Common\Config;
+use App\Common\Config\Config;
 use App\Context\RestServiceContextProvider;
+use App\Service\DefaultServiceContainer;
 use App\Service\Product\ProductService;
-use App\Service\ServiceFactory;
+use App\Service\ServiceContainer;
 use Doctrine\ORM\EntityManager;
 use Psr\SimpleCache\CacheInterface;
 use Symfony\Component\Serializer\Serializer;
 
-class Services {
+class Services implements ServiceContainer {
 
     /**
      * Singleton instance.
@@ -18,24 +19,7 @@ class Services {
      */
     private static $instance = null;
 
-    /* Lazily created instances. */
-
-    /**
-     * @var EntityManager
-     */
-    private $entityManager;
-
-    /**
-     * @var \App\Service\Product\ProductService
-     */
-    private $productService;
-
-    /* Instances created in constructor. */
-
-    private $serviceFactory;
-    private $config;
-    private $cache;
-    private $serializer;
+    private $container;
 
     public static function Instance(): Services {
         if (!isset(static::$instance)) {
@@ -52,44 +36,27 @@ class Services {
         // Singleton
         $contextProvider = new RestServiceContextProvider();
         $context = $contextProvider->createServiceContext();
-        $serviceFactory = new ServiceFactory($context);
-        $config = $serviceFactory->createConfig();
-        $cache = $serviceFactory->createCache($config);
-        $serializer = $serviceFactory->createSerializer();
-        $this->serviceFactory = $serviceFactory;
-        $this->config = $config;
-        $this->cache = $cache;
-        $this->serializer = $serializer;
+        $this->container = new DefaultServiceContainer($context);
     }
 
     public function getConfig(): Config {
-        return $this->config;
+        return $this->container->getConfig();
     }
 
     public function getCache(): CacheInterface {
-        return $this->cache;
+        return $this->container->getCache();
     }
 
     public function getSerializer(): Serializer {
-        return $this->serializer;
+        return $this->container->getSerializer();
     }
 
     public function getEntityManager(): EntityManager {
-        if (isset($this->entityManager)) {
-            return $this->entityManager;
-        }
-        $this->entityManager = $this->serviceFactory->createEntityManager(
-            $this->getConfig());
-        return $this->entityManager;
+        return $this->container->getEntityManager();
     }
 
     public function getProductService(): ProductService {
-        if (isset($this->productService)) {
-            return $this->productService;
-        }
-        $this->productService = $this->serviceFactory->createProductService(
-            $this->getEntityManager());
-        return $this->productService;
+        return $this->container->getProductService();
     }
 
 }

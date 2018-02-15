@@ -2,6 +2,7 @@
 
 namespace App\Context;
 
+use App\Common\Config\YamlConfigFactory;
 use App\Service\LoggerFactory;
 use App\Service\ServiceContext;
 use Monolog\Formatter\JsonFormatter;
@@ -13,6 +14,7 @@ class RestServiceContextProvider implements ServiceContextProvider {
     public function createServiceContext(): ServiceContext {
         return ServiceContext::builder()
             ->withLoggerFactory(new RestLoggerFactory())
+            ->withConfigFactory(new YamlConfigFactory())
             ->build();
     }
 

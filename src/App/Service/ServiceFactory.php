@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use App\Common\Config;
+use App\Common\Config\Config;
 use App\Service\Product\ProductService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
@@ -15,7 +15,6 @@ use Symfony\Component\Serializer\Encoder\YamlEncoder;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Yaml\Yaml;
 
 class ServiceFactory {
 
@@ -26,7 +25,7 @@ class ServiceFactory {
     }
 
     public function createConfig(): Config {
-        return new Config(Yaml::parseFile(__DIR__ . '/../../../config.yaml'));
+        return $this->context->getConfigFactory()->createConfig();
     }
 
     public function createCache(Config $config): CacheInterface {
