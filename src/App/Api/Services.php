@@ -3,7 +3,6 @@
 namespace App\Api;
 
 use App\Common\Config\Config;
-use App\Context\RestServiceContextProvider;
 use App\Service\DefaultServiceContainer;
 use App\Service\Product\ProductService;
 use App\Service\ServiceContainer;
@@ -34,7 +33,7 @@ class Services implements ServiceContainer {
 
     private function __construct() {
         // Singleton
-        $contextProvider = new RestServiceContextProvider();
+        $contextProvider = new ApiServiceContextProvider();
         $context = $contextProvider->createServiceContext();
         $this->container = new DefaultServiceContainer($context);
     }
